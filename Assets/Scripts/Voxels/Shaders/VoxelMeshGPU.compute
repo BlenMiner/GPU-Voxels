@@ -1,0 +1,243 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+#pragma kernel CSMap
+
+#include "Packages/jp.keijiro.noiseshader/Shader/SimplexNoise3D.hlsl"
+
+struct CVertex
+{
+    uint data;
+};
+
+struct Vertex
+{
+    uint3 position;
+    uint normal;
+};
+
+struct Triangle
+{
+    CVertex verts[3];
+};
+
+AppendStructuredBuffer<Triangle> _Mesh;
+RWStructuredBuffer<uint> _Map;
+
+RWTexture2D<int3> Result;
+
+#define SIZE 128
+#define SIZE_2 SIZE * SIZE
+
+#define FRONT 0
+#define BACK 1
+#define RIGHT 2
+#define LEFT 3
+#define UP 4
+#define DOWN 5
+
+uint3 IndexToVoxel(int idx)
+{
+    uint z = idx / SIZE_2;
+    idx -= z * SIZE_2;
+
+    uint y = idx / SIZE;
+    uint x = idx % SIZE;
+
+    return uint3(x, y, z);
+}
+
+uint VoxelToIndex(uint3 v)
+{
+    return v.z * SIZE_2 + v.y * SIZE + v.x;
+}
+
+inline uint GetBlock(uint3 position)
+{
+    uint index = VoxelToIndex(position);
+    return _Map[index];
+}
+
+inline void SetBlock(uint block, uint3 position)
+{
+    uint index = VoxelToIndex(position);
+    _Map[index] = block;
+}
+
+inline CVertex Compress(Vertex v)
+{
+    CVertex c;
+    uint data = 0;
+
+    data = v.position.x;
+    data += v.position.y << 8;
+    data += v.position.z << 16;
+    data += v.normal << 24;
+
+    c.data = data;
+    return c;
+}
+
+void AppendTriangle(Vertex v0, Vertex v1, Vertex v2)
+{
+    Triangle tri;
+
+    tri.verts[0] = Compress(v0);
+    tri.verts[1] = Compress(v1);
+    tri.verts[2] = Compress(v2);
+
+    _Mesh.Append(tri);
+}
+
+inline void AddTopFace(int3 id)
+{
+    Vertex v0;
+
+    v0.position = int3(id.x, id.y + 1, id.z);
+    v0.normal = UP;
+
+    Vertex v1 = v0;
+    Vertex v2 = v0;
+    Vertex v3 = v0;
+
+    v1.position += int3(0, 0, 1);
+    v2.position += int3(1, 0, 1);
+    v3.position += int3(1, 0, 0);
+
+    AppendTriangle(v0, v1, v2);
+    AppendTriangle(v0, v2, v3);
+}
+
+inline void AddBottomFace(uint3 id)
+{
+    Vertex v0;
+
+    v0.position = int3(id.x, id.y, id.z);
+    v0.normal = DOWN;
+
+    Vertex v1 = v0;
+    Vertex v2 = v0;
+    Vertex v3 = v0;
+
+    v1.position += int3(0, 0, 1);
+    v2.position += int3(1, 0, 1);
+    v3.position += int3(1, 0, 0);
+
+    AppendTriangle(v0, v2, v1);
+    AppendTriangle(v0, v3, v2);
+}
+
+inline void AddRightFace(uint3 id)
+{
+    Vertex v0;
+
+    v0.position = int3(id.x + 1, id.y, id.z);
+    v0.normal = RIGHT;
+
+    Vertex v1 = v0;
+    Vertex v2 = v0;
+    Vertex v3 = v0;
+
+    v1.position += int3(0, 0, 1);
+    v2.position += int3(0, 1, 1);
+    v3.position += int3(0, 1, 0);
+
+    AppendTriangle(v0, v2, v1);
+    AppendTriangle(v0, v3, v2);
+}
+
+inline void AddLeftFace(uint3 id)
+{
+    Vertex v0;
+
+    v0.position = int3(id.x, id.y, id.z);
+    v0.normal = LEFT;
+
+    Vertex v1 = v0;
+    Vertex v2 = v0;
+    Vertex v3 = v0;
+
+    v1.position += int3(0, 0, 1);
+    v2.position += int3(0, 1, 1);
+    v3.position += int3(0, 1, 0);
+
+    AppendTriangle(v0, v1, v2);
+    AppendTriangle(v0, v2, v3);
+}
+
+inline void AddFrontFace(uint3 id)
+{
+    Vertex v0;
+
+    v0.position = int3(id.x, id.y, id.z + 1);
+    v0.normal = FRONT;
+
+    Vertex v1 = v0;
+    Vertex v2 = v0;
+    Vertex v3 = v0;
+
+    v1.position += int3(1, 0, 0);
+    v2.position += int3(1, 1, 0);
+    v3.position += int3(0, 1, 0);
+
+    AppendTriangle(v0, v1, v2);
+    AppendTriangle(v0, v2, v3);
+}
+
+inline void AddBackFace(uint3 id)
+{
+    Vertex v0;
+
+    v0.position = int3(id.x, id.y, id.z);
+    v0.normal = BACK;
+    
+    Vertex v1 = v0;
+    Vertex v2 = v0;
+    Vertex v3 = v0;
+
+    v1.position += int3(1, 0, 0);
+    v2.position += int3(1, 1, 0);
+    v3.position += int3(0, 1, 0);
+
+    AppendTriangle(v0, v2, v1);
+    AppendTriangle(v0, v3, v2);
+}
+
+[numthreads(8, 8, 8)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    int block = GetBlock(id);
+
+    if (block != 0)
+    {
+        if (GetBlock(id + int3(0, 1, 0)) == 0)
+        {
+            AddTopFace(id);
+        }
+        if (GetBlock(id - int3(0, 1, 0)) == 0)
+        {
+            AddBottomFace(id);
+        }
+        if (GetBlock(id + int3(1, 0, 0)) == 0)
+        {
+            AddRightFace(id);
+        }
+        if (GetBlock(id - int3(1, 0, 0)) == 0)
+        {
+            AddLeftFace(id);
+        }
+        if (GetBlock(id + int3(0, 0, 1)) == 0)
+        {
+            AddFrontFace(id);
+        }
+        if (GetBlock(id - int3(0, 0, 1)) == 0)
+        {
+            AddBackFace(id);
+        }
+    }
+}
+
+[numthreads(8, 8, 8)]
+void CSMap(uint3 id : SV_DispatchThreadID)
+{
+    SetBlock(SimplexNoise(id * 0.05f) < 0 ? 0 : 1, id);
+}
