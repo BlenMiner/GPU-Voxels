@@ -16,7 +16,7 @@ public class VoxelEditor : MonoBehaviour
 
             if (Input.GetMouseButtonDown(0))
             {
-                hit.chunk.MapOperations.DigBigSphere(worldPos, 1f, Blocks.BLOCK_AIR);
+                hit.chunk.MapOperations.DigBigSphere(worldPos, 3f, Blocks.BLOCK_AIR);
             }
         }
     }
