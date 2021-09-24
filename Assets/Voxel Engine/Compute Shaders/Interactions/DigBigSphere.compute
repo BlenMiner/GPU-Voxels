@@ -1,0 +1,34 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel DigBigSphere
+
+uint B_AIR;
+uint B_DIRT;
+uint B_GRASS;
+
+int m_size_x;
+int m_size_y;
+int m_size_z;
+
+float3 m_worldPos;
+
+float3 m_actionPosition;
+
+float m_actionRadius;
+
+RWStructuredBuffer<uint> Map;
+
+int to1D(int3 pos, int3 size) {
+    return pos.x + pos.y * size.x + pos.z * size.x * size.y;
+}
+
+[numthreads(8,8,8)]
+void DigBigSphere (uint3 id : SV_DispatchThreadID)
+{
+    int3 SIZE = int3(m_size_x, m_size_y, m_size_z);
+    float3 WORLD = m_worldPos + id;
+
+    if (distance(m_actionPosition, WORLD) <= m_actionRadius)
+    {
+        Map[to1D((int3)id, SIZE)] = B_AIR;
+    }
+}

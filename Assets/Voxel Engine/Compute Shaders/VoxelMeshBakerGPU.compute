@@ -1,0 +1,93 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel BakeMesh
+
+#include "VoxelMap.cginc"
+#include "VoxelMapBuffersFunctions.cginc"
+
+static const uint M_Top = 1u;
+static const uint M_Bottom = 2u;
+static const uint M_Left = 4u; 
+static const uint M_Right = 8u;
+static const uint M_Front = 16u;
+static const uint M_Back = 32u;
+
+struct Block
+{
+    int blockID;
+    int blockUVs;
+};
+
+struct QuadData
+{
+    int blockFaceMask;
+    int blockUVs;
+    float3 position;
+};
+
+struct DrawCallArgBuffer
+{
+    int vertexCountPerInstance;
+    int instanceCount;
+    int startVertexLocation;
+    int startInstanceLocation;
+};
+
+float3 m_worldPos;
+
+StructuredBuffer<Block> Blocks;
+AppendStructuredBuffer<QuadData> Faces;
+RWStructuredBuffer<DrawCallArgBuffer> Args;
+
+
+[numthreads(8,8,8)]
+void BakeMesh (uint3 id : SV_DispatchThreadID)
+{
+    int3 pos = (int3)id;
+    QuadData data;
+
+    uint blockId = GetBlock(pos);
+
+    data.position = m_worldPos + pos;
+
+    if (blockId != 0)
+    {
+        data.blockUVs = Blocks[blockId - 1].blockUVs;
+
+        if (GetBlock(pos + int3(0, 1, 0)) == 0)
+        {
+            data.blockFaceMask = M_Top;
+            Faces.Append(data);
+            InterlockedAdd(Args[0].vertexCountPerInstance, 6);
+        }
+        if (GetBlock(pos + int3(0, -1, 0)) == 0)
+        {
+            data.blockFaceMask = M_Bottom;
+            Faces.Append(data);
+            InterlockedAdd(Args[0].vertexCountPerInstance, 6);
+        }
+        if (GetBlock(pos + int3(1, 0, 0)) == 0)
+        {
+            data.blockFaceMask = M_Right;
+            Faces.Append(data);
+            InterlockedAdd(Args[0].vertexCountPerInstance, 6);
+        }
+        if (GetBlock(pos + int3(-1, 0, 0)) == 0)
+        {
+            data.blockFaceMask = M_Left;
+            Faces.Append(data);
+            InterlockedAdd(Args[0].vertexCountPerInstance, 6);
+        }
+        if (GetBlock(pos + int3(0, 0, 1)) == 0)
+        {
+            data.blockFaceMask = M_Front;
+            Faces.Append(data);
+            InterlockedAdd(Args[0].vertexCountPerInstance, 6);
+        }
+        if (GetBlock(pos + int3(0, 0, -1)) == 0)
+        {
+            data.blockFaceMask = M_Back;
+            Faces.Append(data);
+            InterlockedAdd(Args[0].vertexCountPerInstance, 6);
+        }
+    }
+}

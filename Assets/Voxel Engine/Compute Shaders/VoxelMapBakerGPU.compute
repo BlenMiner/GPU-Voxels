@@ -1,0 +1,47 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel MapBaker
+
+#include "Packages/jp.keijiro.noiseshader/Shader/SimplexNoise2D.hlsl"
+#include "Packages/jp.keijiro.noiseshader/Shader/SimplexNoise3D.hlsl"
+
+uint B_AIR;
+uint B_DIRT;
+uint B_GRASS;
+
+int m_size_x;
+int m_size_y;
+int m_size_z;
+
+float3 m_worldPos;
+RWStructuredBuffer<uint> Map;
+
+
+int to1D(int3 pos, int3 size) {
+    return pos.x + pos.y * size.x + pos.z * size.x * size.y;
+}
+
+[numthreads(8,8,8)]
+void MapBaker (uint3 id : SV_DispatchThreadID)
+{
+    int3 SIZE = int3(m_size_x, m_size_y, m_size_z);
+    float3 WORLD = m_worldPos + id;
+    
+    float noise = SimplexNoise((WORLD.xz) * 0.005f);
+    float holes = SimplexNoise((WORLD.xyz) * 0.05f) + noise * 10;
+
+    float detail = SimplexNoise((WORLD.xz) * 0.05f);
+    int height = (noise * 64) + (detail * 5);
+
+    uint block = B_AIR;
+
+    block = WORLD.y < height ? B_DIRT : B_AIR;
+    block = WORLD.y == height ? B_GRASS : block;
+
+    if (holes < 0)
+    {
+        block = B_AIR;
+    }
+
+
+    Map[to1D(id, SIZE)] = block;
+}

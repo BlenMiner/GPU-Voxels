@@ -1,0 +1,61 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel FaceCounter
+
+int m_size_x;
+int m_size_y;
+int m_size_z;
+
+StructuredBuffer<uint> Map;
+RWStructuredBuffer<uint> Counter;
+
+int to1D(int3 pos, int3 size) {
+    return pos.x + pos.y * size.x + pos.z * size.x * size.y;
+}
+
+bool IsOutOfBounds(int3 pos)
+{
+    return (pos.x < 0 || pos.x >= m_size_x ||
+            pos.y < 0 || pos.y >= m_size_y ||
+            pos.z < 0 || pos.z >= m_size_z);
+}
+
+uint GetBlock(int3 pos)
+{
+    if (IsOutOfBounds(pos)) return 0;
+
+    return Map[to1D(pos, int3(m_size_x, m_size_y, m_size_z))];
+}
+
+[numthreads(8, 8, 8)]
+void FaceCounter (uint3 id : SV_DispatchThreadID)
+{
+    int3 pos = (int3)id;
+
+    if (GetBlock(pos) != 0)
+    {
+        if (GetBlock(pos + int3(0, 1, 0)) == 0)
+        {
+            InterlockedAdd(Counter[0], 1);
+        }
+        if (GetBlock(pos + int3(0, -1, 0)) == 0)
+        {
+            InterlockedAdd(Counter[0], 1);
+        }
+        if (GetBlock(pos + int3(1, 0, 0)) == 0)
+        {
+            InterlockedAdd(Counter[0], 1);
+        }
+        if (GetBlock(pos + int3(-1, 0, 0)) == 0)
+        {
+            InterlockedAdd(Counter[0], 1);
+        }
+        if (GetBlock(pos + int3(0, 0, 1)) == 0)
+        {
+            InterlockedAdd(Counter[0], 1);
+        }
+        if (GetBlock(pos + int3(0, 0, -1)) == 0)
+        {
+            InterlockedAdd(Counter[0], 1);
+        }
+    }
+}

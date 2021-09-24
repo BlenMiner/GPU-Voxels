@@ -1,0 +1,93 @@
+#pragma kernel AddMeshData
+
+#define BUFFER_COUNT 32
+
+struct FaceData
+{
+    int blockFaceMask;
+    float2 blockUV;
+    float3 position;
+};
+
+AppendStructuredBuffer<FaceData> m_faces;
+
+#define DEFINE_BUFFER(X) StructuredBuffer<FaceData> m_buffers_##X; int m_buffer_count_##X
+
+DEFINE_BUFFER(0);
+DEFINE_BUFFER(1);
+DEFINE_BUFFER(2);
+DEFINE_BUFFER(3);
+DEFINE_BUFFER(4);
+DEFINE_BUFFER(5);
+DEFINE_BUFFER(6);
+DEFINE_BUFFER(7);
+DEFINE_BUFFER(8);
+DEFINE_BUFFER(9);
+DEFINE_BUFFER(10);
+DEFINE_BUFFER(11);
+DEFINE_BUFFER(12);
+DEFINE_BUFFER(13);
+DEFINE_BUFFER(14);
+DEFINE_BUFFER(15);
+DEFINE_BUFFER(16);
+DEFINE_BUFFER(17);
+DEFINE_BUFFER(18);
+DEFINE_BUFFER(19);
+DEFINE_BUFFER(20);
+DEFINE_BUFFER(21);
+DEFINE_BUFFER(22);
+DEFINE_BUFFER(23);
+DEFINE_BUFFER(24);
+DEFINE_BUFFER(25);
+DEFINE_BUFFER(26);
+DEFINE_BUFFER(27);
+DEFINE_BUFFER(28);
+DEFINE_BUFFER(29);
+DEFINE_BUFFER(30);
+DEFINE_BUFFER(31);
+
+int m_bufferCount;
+
+#define APPEND(X) case X: if ((int)id.y < m_buffer_count_##X) { m_faces.Append(m_buffers_##X[id.y]); } break;
+
+[numthreads(BUFFER_COUNT, 8, 1)]
+void AddMeshData (uint3 id : SV_DispatchThreadID)
+{
+    if ((int)id.x >= m_bufferCount) return;
+
+    switch (id.x)
+    {
+        APPEND(0);
+        APPEND(1);
+        APPEND(2);
+        APPEND(3);
+        APPEND(4);
+        APPEND(5);
+        APPEND(6);
+        APPEND(7);
+        APPEND(8);
+        APPEND(9);
+        APPEND(10);
+        APPEND(11);
+        APPEND(12);
+        APPEND(13);
+        APPEND(14);
+        APPEND(15);
+        APPEND(16);
+        APPEND(17);
+        APPEND(18);
+        APPEND(19);
+        APPEND(20);
+        APPEND(21);
+        APPEND(22);
+        APPEND(23);
+        APPEND(24);
+        APPEND(25);
+        APPEND(26);
+        APPEND(27);
+        APPEND(28);
+        APPEND(29);
+        APPEND(30);
+        APPEND(31);
+    }
+}

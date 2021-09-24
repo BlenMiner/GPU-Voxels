@@ -4,7 +4,7 @@
 PlayerSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 22
-  productGUID: aa6bc085ea955d242b4e576f5127fada
+  productGUID: d72e56ebc8f37344aa3fcc5e4a4fdf37
   AndroidProfiler: 0
   AndroidFilterTouchesWhenObscured: 0
   AndroidEnableSustainedPerformanceMode: 0
@@ -13,7 +13,7 @@ PlayerSettings:
   useOnDemandResources: 0
   accelerometerFrequency: 60
   companyName: DefaultCompany
-  productName: GPU Voxels
+  productName: Programming Hub
   defaultCursor: {fileID: 0}
   cursorHotspot: {x: 0, y: 0}
   m_SplashScreenBackgroundColor: {r: 0.13725491, g: 0.12156863, b: 0.1254902, a: 1}
@@ -47,9 +47,9 @@ PlayerSettings:
   defaultScreenWidthWeb: 960
   defaultScreenHeightWeb: 600
   m_StereoRenderingPath: 0
-  m_ActiveColorSpace: 0
+  m_ActiveColorSpace: 1
   m_MTRendering: 1
-  mipStripping: 1
+  mipStripping: 0
   numberOfMipsStripped: 0
   m_StackTraceTypes: 010000000100000001000000010000000100000001000000
   iosShowActivityIndicatorOnLoading: -1
@@ -138,7 +138,7 @@ PlayerSettings:
     enable360StereoCapture: 0
   isWsaHolographicRemotingEnabled: 0
   enableFrameTimingStats: 0
-  useHDRDisplay: 0
+  useHDRDisplay: 1
   D3DHDRBitDepth: 0
   m_ColorGamuts: 00000000
   targetPixelDensity: 30
@@ -146,7 +146,7 @@ PlayerSettings:
   androidSupportedAspectRatio: 1
   androidMaxAspectRatio: 2.1
   applicationIdentifier:
-    Standalone: com.DefaultCompany.GPUVoxels
+    Standalone: com.DefaultCompany.ProgrammingHub
   buildNumber:
     Standalone: 0
     iPhone: 0
@@ -262,7 +262,7 @@ PlayerSettings:
   m_BuildTargetBatching:
   - m_BuildTarget: Standalone
     m_StaticBatching: 1
-    m_DynamicBatching: 1
+    m_DynamicBatching: 0
   - m_BuildTarget: tvOS
     m_StaticBatching: 1
     m_DynamicBatching: 0
@@ -354,6 +354,7 @@ PlayerSettings:
   switchScreenResolutionBehavior: 2
   switchUseCPUProfiler: 0
   switchUseGOLDLinker: 0
+  switchLTOSetting: 0
   switchApplicationID: 0x01004b9000490000
   switchNSODependencies: 
   switchTitleNames_0: 
@@ -483,6 +484,8 @@ PlayerSettings:
   switchNetworkInterfaceManagerInitializeEnabled: 1
   switchPlayerConnectionEnabled: 1
   switchUseNewStyleFilepaths: 0
+  switchUseMicroSleepForYield: 1
+  switchMicroSleepForYieldTime: 25
   ps4NPAgeRating: 12
   ps4NPTitleSecret: 
   ps4NPTrophyPackPath: 
@@ -553,6 +556,7 @@ PlayerSettings:
   ps4videoRecordingFeaturesUsed: 0
   ps4contentSearchFeaturesUsed: 0
   ps4CompatibilityPS5: 0
+  ps4AllowPS5Detection: 0
   ps4GPU800MHz: 1
   ps4attribEyeToEyeDistanceSettingVR: 0
   ps4IncludedModules: []
@@ -577,20 +581,29 @@ PlayerSettings:
   webGLLinkerTarget: 1
   webGLThreadsSupport: 0
   webGLDecompressionFallback: 0
-  scriptingDefineSymbols: {}
+  scriptingDefineSymbols:
+    1: UNITY_POST_PROCESSING_STACK_V2
+    7: UNITY_POST_PROCESSING_STACK_V2
+    13: UNITY_POST_PROCESSING_STACK_V2
+    14: UNITY_POST_PROCESSING_STACK_V2
+    19: UNITY_POST_PROCESSING_STACK_V2
+    21: UNITY_POST_PROCESSING_STACK_V2
+    25: UNITY_POST_PROCESSING_STACK_V2
+    27: UNITY_POST_PROCESSING_STACK_V2
+    28: UNITY_POST_PROCESSING_STACK_V2
+    29: UNITY_POST_PROCESSING_STACK_V2
+    30: UNITY_POST_PROCESSING_STACK_V2
+    32: UNITY_POST_PROCESSING_STACK_V2
+    33: UNITY_POST_PROCESSING_STACK_V2
   additionalCompilerArguments: {}
   platformArchitecture: {}
-  scriptingBackend:
-    Standalone: 1
-  il2cppCompilerConfiguration:
-    Standalone: 2
-  managedStrippingLevel:
-    Standalone: 3
+  scriptingBackend: {}
+  il2cppCompilerConfiguration: {}
+  managedStrippingLevel: {}
   incrementalIl2cppBuild: {}
   suppressCommonWarnings: 1
   allowUnsafeCode: 0
   useDeterministicCompilation: 1
-  useReferenceAssemblies: 1
   enableRoslynAnalyzers: 1
   additionalIl2CppArgs: 
   scriptingRuntimeVersion: 1
@@ -677,10 +690,10 @@ PlayerSettings:
     m_VersionName: 
   apiCompatibilityLevel: 6
   activeInputHandler: 0
-  cloudProjectId: ec3563dd-4393-4655-b9bb-9133c90d5d00
+  cloudProjectId: dbdc4d1b-f3b7-40a4-b14c-ef50b5ac333a
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: GPU Voxels
+  projectName: Programming Hub
   organizationId: valentin-bordeianu
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0

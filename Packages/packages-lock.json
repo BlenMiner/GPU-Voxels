@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "com.unity.burst": {
-      "version": "1.4.8",
+      "version": "1.5.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
@@ -10,21 +10,23 @@
       "url": "https://packages.unity.com"
     },
     "com.unity.collab-proxy": {
-      "version": "1.3.9",
+      "version": "1.5.7",
       "depth": 0,
       "source": "registry",
-      "dependencies": {},
+      "dependencies": {
+        "com.unity.nuget.newtonsoft-json": "2.0.0"
+      },
       "url": "https://packages.unity.com"
     },
     "com.unity.collections": {
-      "version": "https://github.com/needle-mirror/com.unity.collections.git",
-      "depth": 0,
-      "source": "git",
+      "version": "1.0.0-pre.5",
+      "depth": 1,
+      "source": "registry",
       "dependencies": {
-        "com.unity.test-framework.performance": "2.3.1-preview",
-        "com.unity.burst": "1.4.1"
+        "com.unity.burst": "1.5.4",
+        "com.unity.test-framework": "1.1.22"
       },
-      "hash": "4ca52cd58cdb97ec256450986971a6e9d7cd7796"
+      "url": "https://packages.unity.com"
     },
     "com.unity.ext.nunit": {
       "version": "1.0.6",
@@ -33,47 +35,54 @@
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
-    "com.unity.ide.visualstudio": {
-      "version": "2.0.8",
+    "com.unity.ide.vscode": {
+      "version": "1.2.4",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {},
+      "url": "https://packages.unity.com"
+    },
+    "com.unity.jobs": {
+      "version": "0.11.0-preview.6",
       "depth": 0,
       "source": "registry",
       "dependencies": {
-        "com.unity.test-framework": "1.1.9"
+        "com.unity.collections": "1.0.0-pre.5",
+        "com.unity.mathematics": "1.2.1"
       },
       "url": "https://packages.unity.com"
     },
     "com.unity.mathematics": {
       "version": "1.2.1",
-      "depth": 1,
+      "depth": 0,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
     "com.unity.nuget.newtonsoft-json": {
-      "version": "2.0.0-preview",
-      "depth": 2,
+      "version": "2.0.0",
+      "depth": 1,
       "source": "registry",
       "dependencies": {},
       "url": "https://packages.unity.com"
     },
+    "com.unity.postprocessing": {
+      "version": "3.1.1",
+      "depth": 0,
+      "source": "registry",
+      "dependencies": {
+        "com.unity.modules.physics": "1.0.0"
+      },
+      "url": "https://packages.unity.com"
+    },
     "com.unity.test-framework": {
-      "version": "1.1.24",
+      "version": "1.1.29",
       "depth": 0,
       "source": "registry",
       "dependencies": {
         "com.unity.ext.nunit": "1.0.6",
         "com.unity.modules.imgui": "1.0.0",
         "com.unity.modules.jsonserialize": "1.0.0"
-      },
-      "url": "https://packages.unity.com"
-    },
-    "com.unity.test-framework.performance": {
-      "version": "2.3.1-preview",
-      "depth": 1,
-      "source": "registry",
-      "dependencies": {
-        "com.unity.test-framework": "1.1.0",
-        "com.unity.nuget.newtonsoft-json": "2.0.0-preview"
       },
       "url": "https://packages.unity.com"
     },
@@ -94,13 +103,6 @@
         "com.unity.modules.ui": "1.0.0",
         "com.unity.modules.imgui": "1.0.0"
       }
-    },
-    "com.whinarn.unitymeshsimplifier": {
-      "version": "https://github.com/Whinarn/UnityMeshSimplifier.git",
-      "depth": 0,
-      "source": "git",
-      "dependencies": {},
-      "hash": "2c6be8c2ae6aa4a63e956ffebb3fe20b46064ea0"
     },
     "jp.keijiro.noiseshader": {
       "version": "2.0.0",
