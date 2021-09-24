@@ -71,6 +71,19 @@ namespace VoxelEngine
             ResetDirty();
         }
 
+        internal void SetDirtyAndNeighbors()
+        {
+            SetDirty();
+
+            foreach(var n in m_chunk.Neighbours)
+            {
+                if (n.Value != null)
+                {
+                    n.Value.Mesh.SetDirty();
+                }
+            }
+        }
+
         private void DispatchFaceCounter(
                 VoxelWorld world, VoxelMap map, 
                 ComputeBuffer argsBuffer, ComputeBuffer facesBuffer,

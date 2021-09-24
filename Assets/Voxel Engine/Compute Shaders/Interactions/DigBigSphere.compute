@@ -1,9 +1,7 @@
 // Each #kernel tells which function to compile; you can have many kernels
 #pragma kernel DigBigSphere
 
-uint B_AIR;
-uint B_DIRT;
-uint B_GRASS;
+uint B_BLOCK;
 
 int m_size_x;
 int m_size_y;
@@ -29,6 +27,6 @@ void DigBigSphere (uint3 id : SV_DispatchThreadID)
 
     if (distance(m_actionPosition, WORLD) <= m_actionRadius)
     {
-        Map[to1D((int3)id, SIZE)] = B_AIR;
+        Map[to1D((int3)id, SIZE)] = B_BLOCK;
     }
 }

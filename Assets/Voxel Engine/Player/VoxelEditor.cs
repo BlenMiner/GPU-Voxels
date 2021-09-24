@@ -13,6 +13,11 @@ public class VoxelEditor : MonoBehaviour
         {
             float3 worldPos = (float3)hit.hitPoint + math.float3(0.5f, 0.5f, 0.5f);
             Gizmos.Bounds(new Bounds(worldPos, Vector3.one * 1.01f), Color.white);
+
+            if (Input.GetMouseButtonDown(0))
+            {
+                hit.chunk.MapOperations.DigBigSphere(worldPos, 1f, Blocks.BLOCK_AIR);
+            }
         }
     }
 }

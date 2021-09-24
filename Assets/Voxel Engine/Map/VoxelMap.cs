@@ -132,6 +132,17 @@ namespace VoxelEngine
             MapBuffer?.Release();
         }
 
+        public void RequestCPUMap()
+        {
+            AsyncGPUReadback.Request(MapBuffer, (dataReceived) => 
+                {
+                    var data = dataReceived.GetData<uint>();
+                    if (NativeArray.IsCreated && data.IsCreated)
+                        data.CopyTo(NativeArray);
+                }
+            );
+        }
+
         public void SetDirty()
         {
             m_dirty = true;

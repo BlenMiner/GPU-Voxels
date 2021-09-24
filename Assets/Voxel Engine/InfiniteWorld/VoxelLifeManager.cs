@@ -59,7 +59,7 @@ namespace VoxelEngine
                     return 1;
             });
 
-            iterationsPerFrame = 3;
+            iterationsPerFrame = 10;
         }
 
         int m_currentIndex = 0;

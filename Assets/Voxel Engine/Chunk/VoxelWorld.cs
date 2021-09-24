@@ -39,7 +39,7 @@ namespace VoxelEngine
             
             Blocks.InitializeBlocks();
 
-            VoxelCollection = new VoxelLifeManager(this, math.int2(7, 4));
+            VoxelCollection = new VoxelLifeManager(this, math.int2(4, 4));
 
             EmptyVoxelMap = new ComputeBuffer(VoxelChunk.CHUNK_SIZE.x * VoxelChunk.CHUNK_SIZE.y * VoxelChunk.CHUNK_SIZE.z, sizeof(uint));
 

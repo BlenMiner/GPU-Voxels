@@ -8,7 +8,7 @@ namespace VoxelEngine
 {
     public class VoxelChunk: IDisposable, IDestructible
     {
-        public static int3 CHUNK_SIZE = new int3(96, 96, 96);
+        public static int3 CHUNK_SIZE = new int3(144, 144, 144);
 
         public Matrix4x4 LocalToWorld => m_matrix;
 
@@ -19,6 +19,8 @@ namespace VoxelEngine
         public VoxelMesh Mesh => m_mesh;
 
         public VoxelMap Map => m_map;
+
+        public VoxelMapOperations MapOperations => m_mapOperations;
 
         public bool IsInitialized { get; private set; }
 
@@ -91,6 +93,7 @@ namespace VoxelEngine
             m_world = world;
             m_mesh = new VoxelMesh(this);
             m_map = new VoxelMap(this, CHUNK_SIZE.x, CHUNK_SIZE.y, CHUNK_SIZE.z);
+            m_mapOperations = new VoxelMapOperations(this, World.ComputeShaders);
 
             InitNeighbourData();
         }
