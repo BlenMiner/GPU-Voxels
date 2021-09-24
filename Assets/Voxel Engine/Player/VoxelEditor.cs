@@ -13,8 +13,6 @@ public class VoxelEditor : MonoBehaviour
         {
             float3 worldPos = (float3)hit.hitPoint + math.float3(0.5f, 0.5f, 0.5f);
             Gizmos.Bounds(new Bounds(worldPos, Vector3.one * 1.01f), Color.white);
-
-            Debug.Log("Hit");
         }
     }
 }

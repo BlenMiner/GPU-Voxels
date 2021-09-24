@@ -50,6 +50,8 @@ namespace VoxelEngine
 
         VoxelMap m_map;
 
+        VoxelMapOperations m_mapOperations;
+
         string GetMapName(int3 offset)
         {
             int x = offset.x;
