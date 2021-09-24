@@ -1,6 +1,7 @@
 using Unity.Mathematics;
 using UnityEngine;
 using VoxelEngine;
+using Gizmos = Popcron.Gizmos;
 
 public class VoxelEditor : MonoBehaviour
 {
@@ -8,16 +9,12 @@ public class VoxelEditor : MonoBehaviour
 
     void Update()
     {
-        /*if (VoxelRaycaster.Raycast(m_world, transform.position, transform.forward, out var hit))
-        {
-        }*/
-    }
-
-    private void OnDrawGizmos()
-    {
         if (VoxelRaycaster.Raycast(m_world, transform.position, transform.forward, out var hit))
         {
-            Gizmos.DrawWireCube((float3)hit.hitPoint + math.float3(0.5f, 0.5f, 0.5f), Vector3.one);
+            float3 worldPos = (float3)hit.hitPoint + math.float3(0.5f, 0.5f, 0.5f);
+            Gizmos.Bounds(new Bounds(worldPos, Vector3.one * 1.01f), Color.white);
+
+            Debug.Log("Hit");
         }
     }
 }

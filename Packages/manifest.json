@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "com.popcron.gizmos": "https://github.com/popcron/gizmos.git",
     "com.unity.burst": "1.5.6",
     "com.unity.ide.vscode": "1.2.4",
     "com.unity.jobs": "0.11.0-preview.6",

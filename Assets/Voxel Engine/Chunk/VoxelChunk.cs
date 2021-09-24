@@ -62,28 +62,26 @@ namespace VoxelEngine
         internal bool IsVoxel(int3 mapPos, out VoxelChunk blockChunk, out uint blockId)
         {
             int3 myPosition = math.int3(LocalToWorld.MultiplyPoint(Vector3.zero));
+            int3 worldMapPos = mapPos;
+
             mapPos -= myPosition;
             blockChunk = this;
 
             if (Map.IsOutOfBounds(mapPos, out int3 offset))
             {
                 mapPos = mapPos - offset * CHUNK_SIZE;
-                blockChunk = this.Neighbours[OffsetMaps[offset]];
+                var neighbor = this.Neighbours[OffsetMaps[offset]];
+
+                if (neighbor == null)
+                {
+                    blockId = Blocks.BLOCK_AIR;
+                    return false;
+                }
+                else return neighbor.IsVoxel(worldMapPos, out blockChunk, out blockId);;
             }
 
-            if (blockChunk == null)
-            {
-                blockId = Blocks.BLOCK_AIR;
-                return false;
-            }
-
-            if (blockChunk == this)
-            {
-                blockId = blockChunk.Map.NativeArray[VoxelMap.to1D(mapPos, CHUNK_SIZE)];
-
-                return blockId != Blocks.BLOCK_AIR;
-            }
-            else return blockChunk.IsVoxel(mapPos, out blockChunk, out blockId);
+            blockId = blockChunk.Map.NativeArray[VoxelMap.to1D(mapPos, CHUNK_SIZE)];
+            return blockId != Blocks.BLOCK_AIR;
         }
 
         public VoxelChunk(VoxelWorld world)
