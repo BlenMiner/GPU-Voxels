@@ -91,6 +91,29 @@ namespace VoxelEngine
             );
         }
 
+        int GetMaskValue(int pos, int size)
+        {
+            return pos < 0 ? -1 : (pos >= size ? 1 : 0);
+        }
+
+        public bool IsOutOfBounds(int3 pos, out int3 offset)
+        {
+            offset = math.int3(
+                GetMaskValue(pos.x, VoxelChunk.CHUNK_SIZE.x),
+                GetMaskValue(pos.y, VoxelChunk.CHUNK_SIZE.y),
+                GetMaskValue(pos.z, VoxelChunk.CHUNK_SIZE.z)
+            );
+            
+            if (math.any(offset != int3.zero))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         public static int to1D(int3 pos, int3 size) {
             return pos.x + pos.y * size.x + pos.z * size.x * size.y;
         }
